@@ -8,13 +8,15 @@ scheduler_router = Router()
 
 @scheduler_router.message()
 async def remind_me():
-    scheduler.add_job(
-        send_reminder,
-        "interval",
-        seconds=4,
-    )
+    for i in select_users():
 
-async def send_reminder():
-    users = select_users()
-    for user in users:
-        await bot.send_message(user, "Привет")
+        scheduler.add_job(
+            send_reminder,
+            "interval",
+            seconds=4,
+            args=i,
+        )
+
+async def send_reminder(user_id: int):
+    await bot.send_message(str(user_id), "Это рассылка")
+

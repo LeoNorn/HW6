@@ -41,6 +41,7 @@ def create_tables():
             productId INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
             price FLOAT,
+            picture TEXT,
             categoryId INTEGER,
             FOREIGN KEY (categoryId) REFERENCES category (id)
         )
@@ -83,8 +84,10 @@ def save_question(user_id):
     db.commit()
 
 def select_users():
-    cursor.execute("SELECT * FROM questions")
-    return cursor.fetchall()
+    cursor.execute("SELECT userId FROM questions")
+    users = cursor.fetchall()
+    user_ids = [user for user in users]
+    return user_ids
 
 def get_products():
     cursor.execute(

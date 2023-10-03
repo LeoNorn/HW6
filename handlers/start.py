@@ -25,7 +25,7 @@ async def hello(message: types.Message):
 
 @start_router.callback_query(F.data == "podpis")
 async def podpis(callback: types.CallbackQuery):
-    save_question(callback.message.from_user.id)
+    save_question(callback.from_user.id)
     await callback.answer("Сохраненно")
 
 
