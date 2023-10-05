@@ -19,4 +19,3 @@ async def remind_me():
 
 async def send_reminder(user_id: int):
     await bot.send_message(str(user_id), "Это рассылка")
-
