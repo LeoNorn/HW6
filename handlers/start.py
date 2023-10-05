@@ -4,7 +4,8 @@ from aiogram.types.inline_keyboard_button import InlineKeyboardButton as IButton
 from aiogram.types.inline_keyboard_markup import InlineKeyboardMarkup
 from text1 import START_TEXT
 from text2 import BUTTON_TEXT
-from db.shopdb import save_question
+from db import queries
+
 
 start_router = Router()
 
@@ -13,21 +14,23 @@ async def hello(message: types.Message):
     kb = InlineKeyboardMarkup(
         inline_keyboard=[
             [
+                IButton(text="подписаться", callback_data="Sub"),
                IButton(text="Контакты", callback_data="contacts"),
                IButton(text="О нас", callback_data="about"),
                IButton(text="Наш сайт", url="https://google.com"),
-               IButton(text="Подписаться", callback_data="podpis"),
             ],
        ]
     )
     await message.answer(START_TEXT, reply_markup=kb)
 
-
-@start_router.callback_query(F.data == "podpis")
-async def podpis(callback: types.CallbackQuery):
-    save_question(callback.from_user.id)
-    await callback.answer("Сохраненно")
-
+@start_router.message(Command('cars'))
+async def hello(message: types.Message):
+    for i in queries.select_cars():
+        await message.answer(f"{i[1],i[2]}")
+@start_router.message(Command('cars'))
+async def hello(message: types.Message):
+    for i in queries.select_cars():
+        await message.answer(f"{i[1],i[2]}")
 
 @start_router.callback_query(F.data == "about")
 async def about(callback: types.CallbackQuery):
@@ -41,3 +44,7 @@ async def about(callback: types.CallbackQuery):
     await callback.answer()
 
     await callback.message.answer("911")
+
+@start_router.callback_query(F.data == "Sub" )
+async def sub(callback: types.CallbackQuery):
+    queries.subscrebu(callback.from_user.id)
